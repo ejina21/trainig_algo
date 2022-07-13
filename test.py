@@ -1,33 +1,25 @@
-# n = int(input())
-#
-# def rec(op, cl, n, s):
-# 	if cl == n:
-# 		print(s)
-# 		return
-# 	if op == cl:
-# 		rec(op + 1, cl, n, s + '(')
-# 	elif op == n:
-# 		rec(op, cl + 1, n, s + ')')
-# 	else:
-# 		rec(op + 1, cl, n, s + '(')
-# 		rec(op, cl + 1, n, s + ')')
-#
-# rec(op=0, cl=0, n=n, s='')
+def convert_to_good_string(s1: str) -> str:
+	def check_remove(sym1, sym2):
+		if sym1.casefold() == sym2.casefold() and \
+			(sym1.islower() and sym2.isupper() or sym1.isupper() and sym2.islower()):
+			return True
+		return False
+	new_str = []
+	i = 0
+	while i < len(s1):
+		first = i
+		second = i + 1
+		new_str.append(i)
+		flag = True
+		while first > -1 and second < len(s1) and check_remove(s1[first], s1[second]):
+			i += 2 if flag else 1
+			new_str.pop()
+			first = new_str[-1] if new_str else -1
+			second += 1
+			flag = False
+		if flag:
+			i += 1
+	return ''.join(s1[i] for i in new_str)
 
-from collections import defaultdict
-s1 = input()
-s2 = input()
-
-d1 = defaultdict(int)
-d2 = defaultdict(int)
-
-for c in s1:
-	d1[c] += 1
-
-for c in s2:
-	d2[c] += 1
-
-if d1 == d2:
-	print(1)
-else:
-	print(0)
+probably_bad_string = input()
+print(convert_to_good_string(probably_bad_string))
